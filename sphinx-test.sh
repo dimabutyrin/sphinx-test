@@ -1,9 +1,13 @@
 #!/bin/bash
 
 readarray array < ./sphinx-queries.txt
-host=$1
-type=$2
+type=$1
 if [ -z "$1" ]
+then
+   type="by-one"
+fi
+host=$2
+if [ -z "$2" ]
 then
    host="127.0.0.1"
 fi
@@ -27,10 +31,8 @@ T="$(($(date +%s%N)-T))";
 S="$((T/1000000000))";
 # Milliseconds
 M="$((T/1000000))";
-echo "Time in milliseconds: ${M}";
+echo "Total time in milliseconds: ${M}";
 }
-
-echo $host;
 
 case $type in
 	by-one)
@@ -43,9 +45,9 @@ case $type in
 	run-parallel;
 	count-time;
 	;;
-	*) #wrong type, show help
-	echo "$(basename "$0") [ARG] -- script for sphinx testing
+	*) #wrong arguments, show help
+	echo "$(basename "$0") [TYPE HOST] -- script for sphinx testing
 	USAGE:
-	$(basename "$0") - for localhost testing
-	$(basename "$0") hostIPorFQDN - for non-localhost testing"
+	$(basename "$0") all - for localhost parallel queris testing
+	$(basename "$0") by-one some.host.name - for ony-by-one testing on some.host.name"
 esac
